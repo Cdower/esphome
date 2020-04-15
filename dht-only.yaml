@@ -1,0 +1,62 @@
+#!include credentials.yaml
+
+esphome:
+  name: bedroom
+  platform: ESP32
+  board: nodemcu-32s
+  
+wifi:
+  ssid: "wi-phour"
+  password: "damnproud"
+
+  manual_ip:
+    static_ip: 192.168.10.230
+    gateway: 192.168.10.0
+    subnet: 255.255.255.0
+  
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Bedroom2 Fallback Hotspot"
+    password: "V2iounGju8ep"
+    
+captive_portal:
+    
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: 073034eaf6cffb9f553f25e5d9664b63
+
+mqtt:
+  broker: 192.168.10.214
+  discovery: True
+  username: homeassistant
+  password: 073034eaf6cffb9f553f25e5d9664b63
+  log_topic: "home/bedroom/sensor"
+  
+#deep_sleep:
+#  run_duration: 90s
+#  sleep_duration: 5min
+
+ota:
+  safe_mode: True
+  password: damnproud
+
+# BLE RSSI Sensor
+esp32_ble_tracker:
+
+#DHT or bme280, DS18B20 Sensor
+sensor:
+  - platform: dht
+    pin: GPIO26
+    model: DHT22
+    temperature:
+      name: "Bedroom Temperature"
+    humidity:
+      name: "Bedroom Humidity"
+  #- platform: ble_rssi
+  #  mac_address: 40:4e:36:7e:04:1f
+  #  name: chris_pixel
+    
+  
