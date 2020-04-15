@@ -5,5 +5,5 @@ esphome yaml files
 `pipenv install`
 
 ## Usage
-esphome .\dht-only.yaml upload
-esphome .\dht-only.yaml logs
+`esphome .\dht-only.yaml upload`
+`esphome .\dht-only.yaml logs`
