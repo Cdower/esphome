@@ -1,0 +1,67 @@
+substitutions:
+  devicename: livingroom
+  upper_devicename: Livingroom
+  
+esphome:
+  name: $devicename
+  platform: ESP32
+  board: nodemcu-32s
+  
+api:
+  password: !secret hass_password
+
+wifi:
+  ssid: !secret SSID
+  password: !secret SSID_PASS
+  manual_ip:
+    static_ip: 192.168.10.231
+    gateway: 192.168.10.0
+    subnet: 255.255.255.0
+  ap:
+    ssid: "${upper_devicename} Fallback Hotspot"
+    password: !secret AP_PASS
+    
+captive_portal:
+    
+# Enable logging
+logger:
+
+mqtt:
+  log_topic: "home/${devicename}/sensor"
+  broker: 192.168.10.214
+  discovery: True
+  username: homeassistant
+  password: !secret hass_password
+
+ota:
+  safe_mode: True
+  password: !secret ota_password
+  
+#deep_sleep:
+#  run_duration: 90s
+#  sleep_duration: 5min
+
+# BLE RSSI Sensor
+esp32_ble_tracker:
+
+i2c:
+  sda: 33
+  scl: 32
+  scan: True
+  id: bus_a
+
+#DHT or bme280, DS18B20 Sensor
+sensor:
+  - platform: bme280
+    i2c_id: bus_a
+    address: 0x77
+    update_interval: 60s
+    temperature:
+      name: "${upper_devicename} Temperature"
+      oversampling: 16x
+    humidity:
+      name: "${upper_devicename} Humidity"
+    pressure:
+      name: "${upper_devicename} Pressure"
+    
+  
