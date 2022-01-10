@@ -20,7 +20,11 @@ ota:
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
-
+  domain: .chrisdower.com
+  manual_ip:
+    static_ip: 192.168.10.50
+    gateway: 192.168.10.0
+    subnet: 255.255.255.0
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: "${upper_devicename} Fallback Hotspot"
