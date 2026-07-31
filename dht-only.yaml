@@ -4,11 +4,15 @@ substitutions:
 
 esphome:
   name: $devicename
-  platform: ESP32
+
+esp32:
   board: nodemcu-32s
+  framework:
+    type: esp-idf
 
 api:
-  password: !secret hass_password
+  encryption:
+    key: !secret api_encryption_key
 
 wifi:
   ssid: !secret SSID
@@ -34,8 +38,10 @@ mqtt:
   password: !secret hass_password
 
 ota:
-  safe_mode: True
-  password: !secret ota_password
+  - platform: esphome
+    password: !secret ota_password
+
+safe_mode:
   
 #deep_sleep:
 #  run_duration: 90s

@@ -1,12 +1,20 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
+# Dependabot configuration
 # https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+#
+# Python dependencies are managed with uv (pyproject.toml + uv.lock).
+# The "uv" ecosystem understands both files, so Dependabot keeps the
+# declared range and the resolved lockfile in step.
 
 version: 2
 updates:
-  - package-ecosystem: "" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "uv"
+    directory: "/"
     schedule:
       interval: "weekly"
-
+    groups:
+      # esphome pins its entire dependency tree exactly, so a single esphome
+      # bump moves most transitive packages at once. Group them into one PR
+      # rather than dozens that each conflict with the others.
+      python-dependencies:
+        patterns:
+          - "*"
