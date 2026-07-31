@@ -1,0 +1,91 @@
+# Wall-display presence node — HLK-LD2410C mmWave on an ESP32
+#
+# Part of the doorbell/weather wall display project (see PRD.md / BOM.md).
+# Reports occupancy + distance near the wall display so Home Assistant can
+# switch between the minimal and detailed weather views (PRD FR-5/FR-6).
+#
+# Wiring (LD2410C -> ESP32 nodemcu-32s):
+#   VCC -> 5V (VIN)   GND -> GND
+#   TX  -> GPIO16     RX  -> GPIO17
+#
+# Bring-up:
+#   1. Add api_encryption_key to secrets.yaml (openssl rand -base64 32)
+#   2. esphome run presence-node.yaml  (first flash over USB, OTA after)
+#   3. Adopt in Home Assistant; tune gate sensitivity via the LD2410
+#      config entities (exposed by default) so the zone covers ~1-2 m
+#      in front of the display without seeing through walls.
+#
+# NOTE: uses current ESPHome syntax (esp32 block, api encryption, ota
+# platform) — unlike the older configs in this repo, this file needs
+# ESPHome 2024.6 or newer.
+
+substitutions:
+  devicename: wall-presence
+  upper_devicename: Wall Presence
+  # How long after the zone empties before the display drops back to the
+  # minimal weather view (PRD FR-6).
+  presence_clear_delay: 30s
+
+esphome:
+  name: $devicename
+
+esp32:
+  board: nodemcu-32s
+  framework:
+    type: esp-idf
+
+logger:
+
+api:
+  encryption:
+    key: !secret api_encryption_key
+
+ota:
+  - platform: esphome
+    password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  domain: .chrisdower.com
+  # Uncomment and pick a free address to match the fleet's static-IP scheme:
+  # manual_ip:
+  #   static_ip: 192.168.10.xxx
+  #   gateway: 192.168.10.1
+  #   subnet: 255.255.255.0
+  ap:
+    ssid: "${upper_devicename} Fallback Hotspot"
+    password: !secret AP_PASS
+
+captive_portal:
+
+uart:
+  id: ld2410_uart
+  tx_pin: GPIO17
+  rx_pin: GPIO16
+  baud_rate: 256000
+  parity: NONE
+  stop_bits: 1
+
+ld2410:
+  uart_id: ld2410_uart
+
+binary_sensor:
+  - platform: ld2410
+    has_target:
+      name: "${upper_devicename} Occupancy"
+      filters:
+        - delayed_off: ${presence_clear_delay}
+    has_moving_target:
+      name: "${upper_devicename} Moving"
+    has_still_target:
+      name: "${upper_devicename} Still"
+
+sensor:
+  - platform: ld2410
+    detection_distance:
+      name: "${upper_devicename} Detection Distance"
+    moving_distance:
+      name: "${upper_devicename} Moving Distance"
+    still_distance:
+      name: "${upper_devicename} Still Distance"
