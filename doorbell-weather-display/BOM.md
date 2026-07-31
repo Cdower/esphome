@@ -21,7 +21,7 @@ Buy **Table A + Table B + Table D** for the recommended tablet build. Table C re
 | Item | Qty | Unit price | Ext. | Source | Notes |
 |---|---|---|---|---|---|
 | HLK-LD2410C 24 GHz mmWave module | 1 | $5–12 | $5–12 | AliExpress / Amazon | Native ESPHome `ld2410` support. ⚠ verify — Amazon markup varies. LD2450 ($8–15) is an alt if multi-target zones ever needed |
-| ESP32 dev board (nodemcu-32s / esp32dev) | 1 | $5–10 | $5–10 | AliExpress / Amazon | Matches existing fleet in this repo; flashed with [`presence-node.yaml`](presence-node.yaml) |
+| ESP32 dev board (nodemcu-32s / esp32dev) | 1 | $5–10 | $5–10 | AliExpress / Amazon | Matches existing fleet in this repo; flashed with [`presence-node.yaml`](../presence-node.yaml) |
 | Small project box + dupont wiring | 1 | ~$10 | $10 | Amazon / 3D print | Mount near display, sensor face unobstructed |
 | **Subtotal** | | | **~$20–32** | | |
 

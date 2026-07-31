@@ -6,7 +6,7 @@
 | **Author** | Chris Dower |
 | **Date** | July 2026 |
 | **Status** | Draft for client review |
-| **Companion docs** | [`BOM.md`](BOM.md) (bill of materials), [`presence-node.yaml`](presence-node.yaml) (ESPHome presence sensor) |
+| **Companion docs** | [`BOM.md`](BOM.md) (bill of materials), [`presence-node.yaml`](../presence-node.yaml) (ESPHome presence sensor) |
 
 ---
 
@@ -68,7 +68,7 @@ Key architectural facts:
 - **Ring has no local video API.** All video transits Ring's cloud. The `ring-mqtt` add-on maintains the cloud session and exposes a local RTSP restream via its embedded go2rtc; Home Assistant's dashboard camera card then delivers it to the tablet over WebRTC. Video is passed through as H.264 without transcoding — negligible hub CPU.
 - **Live view requires no Ring subscription.** Only recorded-event playback does.
 - **The tablet renders, the hub decides.** All state-machine logic lives in Home Assistant automations. The tablet is a dumb kiosk pointed at dashboards; Home Assistant pushes view changes via the Fully Kiosk integration (`load_url`, screen on/off, brightness).
-- **Presence is sensed by a dedicated mmWave node** ([`presence-node.yaml`](presence-node.yaml)), not the tablet camera. Tablet camera motion detection is widely documented as unreliable (light-change false triggers, poor low-light performance). The LD2410C detects micro-motion at up to ~5 m and reports distance, enabling approach-based switching.
+- **Presence is sensed by a dedicated mmWave node** ([`presence-node.yaml`](../presence-node.yaml)), not the tablet camera. Tablet camera motion detection is widely documented as unreliable (light-change false triggers, poor low-light performance). The LD2410C detects micro-motion at up to ~5 m and reports distance, enabling approach-based switching.
 
 ## 4. Functional Requirements
 
@@ -160,7 +160,7 @@ A middle option exists between the two: a **PoE Android in-wall panel** (battery
 2. **Mosquitto broker** add-on.
 3. **ring-mqtt** add-on — authenticate to the client's Ring account; cameras appear via MQTT discovery with ding/motion event entities and the live camera stream.
 4. **Weather** — Met.no (default, no key) or NWS (US, free; OQ-6). Create **forecast template sensors** via `weather.get_forecasts` (required by §5).
-5. **Presence node** — flash [`presence-node.yaml`](presence-node.yaml), mount near the display, tune LD2410 gates to the approach zone.
+5. **Presence node** — flash [`presence-node.yaml`](../presence-node.yaml), mount near the display, tune LD2410 gates to the approach zone.
 6. **Tablet** — install Fully Kiosk Browser + PLUS license ($9 one-time); configure kiosk URL, remote admin, screen/motion settings; disable MAC randomization; add the `fully_kiosk` integration in HA.
 7. **Dashboards** — three views (§5) + `kiosk-mode` HACS plugin.
 8. **Automations** — ding/motion/presence/timeout view switching, nightly restart, charge cycling (Appendix A).
