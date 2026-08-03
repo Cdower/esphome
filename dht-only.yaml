@@ -15,8 +15,8 @@ api:
     key: !secret api_encryption_key
 
 wifi:
-  ssid: !secret SSID
-  password: !secret SSID_PASS
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
   manual_ip:
     static_ip: 192.168.10.230
     gateway: 192.168.10.0
@@ -35,7 +35,7 @@ mqtt:
   broker: 192.168.10.214
   discovery: True
   username: homeassistant
-  password: !secret hass_password
+  password: !secret mqtt_password
 
 ota:
   - platform: esphome
