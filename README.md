@@ -23,10 +23,15 @@ uv sync
 matching Python (see `.python-version`) if you don't already have one. There is
 no separate virtualenv step.
 
-Create a `secrets.yaml` in the repo root (it is gitignored) with the keys the
-configs reference: `wifi_ssid`, `wifi_password`, `SSID`, `SSID_PASS`, `AP_PASS`,
-`hass_password`, `ota_password`, `mqtt_broker`, and `api_encryption_key`.
-Generate the API key with `openssl rand -base64 32`.
+Then create your `secrets.yaml` from the template:
+
+```
+cp example.secrets.yaml secrets.yaml
+```
+
+Fill in the real values. `secrets.yaml` is gitignored;
+[example.secrets.yaml](example.secrets.yaml) documents every key, which configs
+use it, and how to generate `api_encryption_key`.
 
 ## Usage
 
