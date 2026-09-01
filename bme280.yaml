@@ -4,18 +4,23 @@ substitutions:
 
 esphome:
   name: $devicename
-  platform: ESP32
+
+esp32:
   board: nodemcu-32s
+  framework:
+    type: esp-idf
 
 # Enable logging
 logger:
 
 # Enable Home Assistant API
 api:
-  password: !secret hass_password
+  encryption:
+    key: !secret api_encryption_key
 
 ota:
-  password: !secret ota_password
+  - platform: esphome
+    password: !secret ota_password
 
 wifi:
   ssid: !secret wifi_ssid
@@ -37,7 +42,7 @@ mqtt:
   broker: !secret mqtt_broker
   discovery: True
   username: homeassistant
-  password: !secret hass_password
+  password: !secret mqtt_password
   
 i2c:
   sda: 33
@@ -47,7 +52,7 @@ i2c:
 
 #DHT or bme280, DS18B20 Sensor
 sensor:
-  - platform: bme280
+  - platform: bme280_i2c
     i2c_id: bus_a
     address: 0x77
     update_interval: 60s
